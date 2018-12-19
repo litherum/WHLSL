@@ -324,93 +324,6 @@ for (let type of [`char`, `short`, `int`, `half`, `float`]) {
         print(`}`);
     }
 }
-for (let type of [`half`, `float`]) {
-    for (let i of [2, 3, 4]) {
-        for (let j of [2, 3, 4]) {
-            print(`${type}${i}x${j} operator+(${type}${i}x${j} a, ${type}${i}x${j} b) {`);
-            print(`    ${type}${i}x${j} result;`);
-            for (let m = 0; m < i; ++m) {
-                for (let n = 0; n < j; ++n) {
-                    print(`    result[${m}][${n}] = a[${m}][${n}] + b[${m}][${n}];`);
-                }
-            }
-            print(`    return result;`);
-            print(`}`);
-            print(`${type}${i}x${j} operator-(${type}${i}x${j} a, ${type}${i}x${j} b) {`);
-            print(`    ${type}${i}x${j} result;`);
-            for (let m = 0; m < i; ++m) {
-                for (let n = 0; n < j; ++n) {
-                    print(`    result[${m}][${n}] = a[${m}][${n}] - b[${m}][${n}];`);
-                }
-            }
-            print(`    return result;`);
-            print(`}`);
-            print(`${type}${i}x${j} operator-(${type}${i}x${j} a) {`);
-            print(`    ${type}${i}x${j} result;`);
-            for (let m = 0; m < i; ++m) {
-                for (let n = 0; n < j; ++n) {
-                    print(`    result[${m}][${n}] = -a[${m}][${n}];`);
-                }
-            }
-            print(`    return result;`);
-            print(`}`);
-            print(`${type}${i}x${j} operator*(${type}${i}x${j} a, ${type}${i}x${j} b) {`);
-            print(`    ${type}${i}x${j} result;`);
-            for (let m = 0; m < i; ++m) {
-                for (let n = 0; n < j; ++n) {
-                    print(`    result[${m}][${n}] = a[${m}][${n}] * b[${m}][${n}];`);
-                }
-            }
-            print(`    return result;`);
-            print(`}`);
-            print(`${type}${i}x${j} operator*(${type}${i}x${j} a, ${type} b) {`);
-            print(`    ${type}${i}x${j} result;`);
-            for (let m = 0; m < i; ++m) {
-                for (let n = 0; n < j; ++n) {
-                    print(`    result[${m}][${n}] = a[${m}][${n}] * b;`);
-                }
-            }
-            print(`    return result;`);
-            print(`}`);
-            print(`${type}${i}x${j} operator*(${type} a, ${type}${i}x${j} b) {`);
-            print(`    ${type}${i}x${j} result;`);
-            for (let m = 0; m < i; ++m) {
-                for (let n = 0; n < j; ++n) {
-                    print(`    result[${m}][${n}] = a * b[${m}][${n}];`);
-                }
-            }
-            print(`    return result;`);
-            print(`}`);
-            print(`${type}${i}x${j} operator/(${type}${i}x${j} a, ${type}${i}x${j} b) {`);
-            print(`    ${type}${i}x${j} result;`);
-            for (let m = 0; m < i; ++m) {
-                for (let n = 0; n < j; ++n) {
-                    print(`    result[${m}][${n}] = a[${m}][${n}] / b[${m}][${n}];`);
-                }
-            }
-            print(`    return result;`);
-            print(`}`);
-            print(`${type}${i}x${j} operator/(${type}${i}x${j} a, ${type} b) {`);
-            print(`    ${type}${i}x${j} result;`);
-            for (let m = 0; m < i; ++m) {
-                for (let n = 0; n < j; ++n) {
-                    print(`    result[${m}][${n}] = a[${m}][${n}] / b;`);
-                }
-            }
-            print(`    return result;`);
-            print(`}`);
-            print(`${type}${i}x${j} operator/(${type} a, ${type}${i}x${j} b) {`);
-            print(`    ${type}${i}x${j} result;`);
-            for (let m = 0; m < i; ++m) {
-                for (let n = 0; n < j; ++n) {
-                    print(`    result[${m}][${n}] = a / b[${m}][${n}];`);
-                }
-            }
-            print(`    return result;`);
-            print(`}`);
-        }
-    }
-}
 
 for (let type of [`bool`, `uchar`, `ushort`, `uint`, `char`, `short`, `int`, `half`, `float`]) {
     print(`operator ${type}2(${type} x, ${type} y) {`);
@@ -657,114 +570,6 @@ for (let type of [`half`, `float`]) {
 }
 print();
 
-for (let type of [`half`, `float`]) {
-    for (let i of [2, 3, 4]) {
-        for (let j of [2, 3, 4]) {
-            print(`bool operator==(${type}${i}x${j} a, ${type}${i}x${j} b) {`);
-            print(`    return`);
-            for (let m = 0; m < i; ++m) {
-                for (let n = 0; n < j; ++n) {
-                    print(`        a[${m}][${n}] == b[${m}][${n}] &&`);
-                }
-            }
-            print(`    true;`);
-            print(`}`);
-        }
-    }
-}
-
-function computeSwizzle(components, maxValue, maxLength) {
-    if (components.length == maxLength) {
-        return [components];
-    } else {
-        let result = [];
-        for (let i = 0; i < maxValue; ++i) {
-            result = result.concat(computeSwizzle(components.concat([i]), maxValue, maxLength));
-        }
-        return result;
-    }
-}
-
-function component(value) {
-    switch (value) {
-        case 0:
-            return `x`;
-        case 1:
-            return `y`;
-        case 2:
-            return `z`;
-        case 3:
-            return `w`;
-        default:
-            fatalError();
-    }
-}
-
-function uniqueLength(swizzle) {
-    let has0 = false;
-    let has1 = false;
-    let has2 = false;
-    let has3 = false;
-    for (let v of swizzle) {
-        switch (v) {
-            case 0:
-                has0 = true;
-                break;
-            case 1:
-                has1 = true;
-                break;
-            case 2:
-                has2 = true;
-                break;
-            case 3:
-                has3 = true;
-                break;
-            default:
-                fatalError();
-        }
-    }
-    let result = 0;
-    if (has0) {
-        result += 1;
-    }
-    if (has1) {
-        result += 1;
-    }
-    if (has2) {
-        result += 1;
-    }
-    if (has3) {
-        result += 1;
-    }
-    return result;
-}
-
-for (let type of [`bool`, `uchar`, `ushort`, `uint`, `char`, `short`, `int`, `half`, `float`]) {
-    for (let size of [2, 3, 4]) {
-        for (let maxValue of [2, 3, 4]) {
-            for (let swizzle of computeSwizzle([], maxValue, size)) {
-                let swizzleName = swizzle.map(component).join("");
-                print(`${type}${size} operator.${swizzleName}(${type}${maxValue} v) {`);
-                print(`    ${type}${size} result;`);
-                for (let i = 0; i < size; ++i) {
-                    print(`    result.${component(i)} = v.${component(swizzle[i])};`);
-                }
-                print(`    return result;`);
-                print(`}`);
-                if (uniqueLength(swizzle) == size) {
-                    print(`${type}${maxValue} operator.${swizzleName}=(${type}${maxValue} v, ${type}${size} c) {`);
-                    print(`    ${type}${maxValue} result = v;`);
-                    for (let i = 0; i < size; ++i) {
-                        print(`    result.${component(swizzle[i])} = c.${component(i)};`);
-                    }
-                    print(`    return result;`);
-                    print(`}`);
-                }
-            }
-        }
-    }
-}
-
 // These functions are unary floating-point scalar functions,
 // which can also be applied to vectors and matrices component-wise.
 (function() {
@@ -843,19 +648,6 @@ for (let type of [`bool`, `uchar`, `ushort`, `uint`, `char`, `short`, `int`, `ha
                 print(`    return result;`);
                 print(`}`);
             }
-            for (let i of [2, 3, 4]) {
-                for (let j of [2, 3, 4]) {
-                    print(`${type}${i}x${j} ${outputFunction}(${type}${i}x${j} x) {`);
-                    print(`    ${type}${i}x${j} result;`);
-                    for (let m = 0; m < i; ++m) {
-                        for (let n = 0; n < j; ++n) {
-                            print(`    result[${m}][${n}] = ${outputFunction}(x[${m}][${n}]);`);
-                        }
-                    }
-                    print(`    return result;`);
-                    print(`}`);
-                }
-            }
         }
         print();
     }
@@ -898,19 +690,6 @@ for (let type of [`bool`, `uchar`, `ushort`, `uint`, `char`, `short`, `int`, `ha
                 print(`    return result;`);
                 print(`}`);
             }
-            for (let i of [2, 3, 4]) {
-                for (let j of [2, 3, 4]) {
-                    print(`${type}${i}x${j} ${outputFunction}(${type}${i}x${j} x, ${type}${i}x${j} y) {`);
-                    print(`    ${type}${i}x${j} result;`);
-                    for (let m = 0; m < i; ++m) {
-                        for (let n = 0; n < j; ++n) {
-                            print(`    result[${m}][${n}] = ${outputFunction}(x[${m}][${n}], y[${m}][${n}]);`);
-                        }
-                    }
-                    print(`    return result;`);
-                    print(`}`);
-                }
-            }
         }
         print();
     }
@@ -944,19 +723,6 @@ for (let type of [`half`, `float`]) {
             }
             print(`    return result;`);
             print(`}`);
-        }
-        for (let i of [2, 3, 4]) {
-            for (let j of [2, 3, 4]) {
-                print(`${type}${i}x${j} ${nonNativeFunction}(${type}${i}x${j} x, ${type}${i}x${j} y, ${type}${i}x${j} z) {`);
-                print(`    ${type}${i}x${j} result;`);
-                for (let m = 0; m < i; ++m) {
-                    for (let n = 0; n < j; ++n) {
-                        print(`    result[${m}][${n}] = ${nonNativeFunction}(x[${m}][${n}], y[${m}][${n}], z[${m}][${n}]);`);
-                    }
-                }
-                print(`    return result;`);
-                print(`}`);
-            }
         }
     }
     print();
@@ -1041,19 +807,6 @@ for (let type of [`half`, `float`]) {
         print(`    return result;`);
         print(`}`);
     }
-    for (let i of [2, 3, 4]) {
-        for (let j of [2, 3, 4]) {
-            print(`${type}${i}x${j} atan2(${type}${i}x${j} x, ${type}${i}x${j} y) {`);
-            print(`    ${type}${i}x${j} result;`);
-            for (let m = 0; m < i; ++m) {
-                for (let n = 0; n < j; ++n) {
-                    print(`    result[${m}][${n}] = atan2(x[${m}][${n}], y[${m}][${n}]);`);
-                }
-            }
-            print(`    return result;`);
-            print(`}`);
-        }
-    }
 }
 print();
 
@@ -1079,24 +832,6 @@ for (let addressSpace1 of [`thread`, `device`, `threadgroup`]) {
                     print(`        (*z)[${i}] = cosResult;`);
                 }
                 print(`}`);
-            }
-            for (let i of [2, 3, 4]) {
-                for (let j of [2, 3, 4]) {
-                    print(`void sincos(${type}${i}x${j} x, ${addressSpace1} ${type}${i}x${j}* y, ${addressSpace2} ${type}${i}x${j}* z) {`);
-                    // Can't take a pointer to a member of a matrix.
-                    print(`    ${type} sinResult;`);
-                    print(`    ${type} cosResult;`);
-                    for (let m = 0; m < i; ++m) {
-                        for (let n = 0; n < j; ++n) {
-                            print(`    sincos(x[${m}][${n}], &sinResult, &cosResult);`);
-                            print(`    if (y != null)`);
-                            print(`        (*y)[${m}][${n}] = sinResult;`);
-                            print(`    if (z != null)`);
-                            print(`        (*z)[${m}][${n}] = cosResult;`);
-                        }
-                    }
-                    print(`}`);
-                }
             }
         }
     }
@@ -1129,21 +864,6 @@ for (let binaryFunction of [[`all`, `true`, `&&`], [`any`, `false`, `||`]]) {
             print(`    return result;`);
             print(`}`);
         }
-        if (type == `half` || type == `float`) {
-            for (let i of [2, 3, 4]) {
-                for (let j of [2, 3, 4]) {
-                    print(`bool ${binaryFunction[0]}(${type}${i}x${j} x) {`);
-                    print(`    bool result = ${binaryFunction[1]};`);
-                    for (let m = 0; m < i; ++m) {
-                        for (let n = 0; n < j; ++n) {
-                            print(`    result = result ${binaryFunction[2]} (x[${m}][${n}] != 0);`);
-                        }
-                    }
-                    print(`    return result;`);
-                    print(`}`);
-                }
-            }
-        }
     }
     print();
 }
@@ -1169,21 +889,6 @@ for (let type of [`uchar`, `ushort`, `uint`, `char`, `short`, `int`, `half`, `fl
         }
         print(`    return result;`);
         print(`}`);
-    }
-    if (type == `half` || type == `float`) {
-        for (let i of [2, 3, 4]) {
-            for (let j of [2, 3, 4]) {
-                print(`${type}${i}x${j} abs(${type}${i}x${j} x) {`);
-                print(`    ${type}${i}x${j} result;`);
-                for (let m = 0; m < i; ++m) {
-                    for (let n = 0; n < j; ++n) {
-                        print(`    result[${m}][${n}] = abs(x[${m}][${n}]);`);
-                    }
-                }
-                print(`    return result;`);
-                print(`}`);
-            }
-        }
     }
 }
 print();
@@ -1212,21 +917,6 @@ for (let type of [`uchar`, `ushort`, `uint`, `char`, `short`, `int`, `half`, `fl
         print(`    return result;`);
         print(`}`);
     }
-    if (type == `half` || type == `float`) {
-        for (let i of [2, 3, 4]) {
-            for (let j of [2, 3, 4]) {
-                print(`${type}${i}x${j} sign(${type}${i}x${j} x) {`);
-                print(`    ${type}${i}x${j} result;`);
-                for (let m = 0; m < i; ++m) {
-                    for (let n = 0; n < j; ++n) {
-                        print(`    result[${m}][${n}] = sign(x[${m}][${n}]);`);
-                    }
-                }
-                print(`    return result;`);
-                print(`}`);
-            }
-        }
-    }
 }
 print();
 
@@ -1250,21 +940,6 @@ for (let type of [`uchar`, `ushort`, `uint`, `char`, `short`, `int`, `half`, `fl
             print(`    return result;`);
             print(`}`);
         }
-        if (type == `half` || type == `float`) {
-            for (let i of [2, 3, 4]) {
-                for (let j of [2, 3, 4]) {
-                    print(`${type}${i}x${j} ${nonNativeFunction}(${type}${i}x${j} x, ${type}${i}x${j} y) {`);
-                    print(`    ${type}${i}x${j} result;`);
-                    for (let m = 0; m < i; ++m) {
-                        for (let n = 0; n < j; ++n) {
-                            print(`    result[${m}][${n}] = ${nonNativeFunction}(x[${m}][${n}], y[${m}][${n}]);`);
-                        }
-                    }
-                    print(`    return result;`);
-                    print(`}`);
-                }
-            }
-        }
     }
     print();
 }
@@ -1285,21 +960,6 @@ for (let type of [`uchar`, `ushort`, `uint`, `char`, `short`, `int`, `half`, `fl
             }
             print(`    return result;`);
             print(`}`);
-        }
-        if (type == `half` || type == `float`) {
-            for (let i of [2, 3, 4]) {
-                for (let j of [2, 3, 4]) {
-                    print(`${type}${i}x${j} ${nonNativeFunction}(${type}${i}x${j} x, ${type}${i}x${j} y, ${type}${i}x${j} z) {`);
-                    print(`    ${type}${i}x${j} result;`);
-                    for (let m = 0; m < i; ++m) {
-                        for (let n = 0; n < j; ++n) {
-                            print(`    result[${m}][${n}] = ${nonNativeFunction}(x[${m}][${n}], y[${m}][${n}], z[${m}][${n}]);`);
-                        }
-                    }
-                    print(`    return result;`);
-                    print(`}`);
-                }
-            }
         }
     }
     print();
@@ -1326,23 +986,6 @@ for (let addressSpace of [`thread`, `device`, `threadgroup`]) {
             }
             print(`    return result;`);
             print(`}`);
-        }
-        for (let i of [2, 3, 4]) {
-            for (let j of [2, 3, 4]) {
-                print(`${type}${i}x${j} modf(${type}${i}x${j} x, ${addressSpace} ${type}${i}x${j}* y) {`);
-                print(`    ${type}${i}x${j} result;`);
-                // Can't take a pointer to a member of a matrix.
-                print(`    ${type} buffer;`);
-                for (let m = 0; m < i; ++m) {
-                    for (let n = 0; n < j; ++n) {
-                        print(`    result[${m}][${n}] = modf(x[${m}][${n}], &buffer);`);
-                        print(`    if (y != null)`);
-                        print(`        (*y)[${m}][${n}] = buffer;`);
-                    }
-                }
-                print(`    return result;`);
-                print(`}`);
-            }
         }
         print();
     }
@@ -1720,27 +1363,6 @@ for (let resultType of [`int`, `uint`, `float`]) {
                 print(`}`);
             }
         }
-        if (resultType == `float` && type == `float`) {
-            for (let i of [2, 3, 4]) {
-                for (let j of [2, 3, 4]) {
-                    if (type == resultType) {
-                        print(`${resultType}${i}x${j} as${resultType}(${type}${i}x${j} x) {`);
-                        print(`    return x;`);
-                        print(`}`);
-                    } else {
-                        print(`${resultType}${i}x${j} as${resultType}(${type}${i}x${j} x) {`);
-                        print(`    ${resultType}${i}x${j} result;`);
-                        for (let m = 0; m < i; ++m) {
-                            for (let n = 0; n < j; ++n) {
-                                print(`    result[${m}][${n}] = as${resultType}(x[${m}][${n}]);`);
-                            }
-                        }
-                        print(`    return result;`);
-                        print(`}`);
-                    }
-                }
-            }
-        }
     }
 }
 print();
@@ -1765,9 +1387,9 @@ for (let size of [2, 3, 4]) {
 }
 print();
 
-print(`native compute void AllMemoryBarrierWithGroupSync();`);
-print(`native compute void DeviceMemoryBarrierWithGroupSync();`);
-print(`native compute void GroupMemoryBarrierWithGroupSync();`);
+print(`native void AllMemoryBarrierWithGroupSync();`);
+print(`native void DeviceMemoryBarrierWithGroupSync();`);
+print(`native void GroupMemoryBarrierWithGroupSync();`);
 print();
 
 for (let type of [`uchar`, `ushort`, `uint`, `char`, `short`, `int`, `half`, `float`]) {
